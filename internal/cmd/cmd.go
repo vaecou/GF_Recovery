@@ -5,9 +5,12 @@ import (
 	"time"
 
 	"GF_Recovery/internal/consts"
+	"GF_Recovery/internal/controller/admin"
+	"GF_Recovery/internal/middleware"
 	"GF_Recovery/utility/simple"
 
 	"github.com/gogf/gf/v2/frame/g"
+	"github.com/gogf/gf/v2/net/ghttp"
 	"github.com/gogf/gf/v2/os/gcmd"
 	"github.com/gogf/gf/v2/os/gsession"
 )
@@ -56,6 +59,34 @@ var (
 			// Session配置
 			s.SetSessionMaxAge(time.Hour)                                                  // 1小时的Session有效期
 			s.SetSessionStorage(gsession.NewStorageRedis(g.Redis(), consts.SessionPrefix)) // 使用Redis存储Session
+
+			// 注册全局中间件
+			s.BindMiddleware("/*", []ghttp.HandlerFunc{
+				middleware.CORS,                 // 跨域中间件，自动处理跨域问题
+				ghttp.MiddlewareHandlerResponse, // HTTP响应预处理，在业务处理完成后，对响应结果进行格式化和错误过滤，将处理后的数据发送给请求方
+			}...)
+
+			s.Group("/admin", func(group *ghttp.RouterGroup) {
+				// 注册分组中间件
+				middleware.AdiminUserToken(ctx, group) // Token以及登录中间件
+				group.Map(g.Map{
+					// 增加管理员
+					"POST:/user": admin.AdminUser.AddAdminUser,
+					// 修改管理员
+					"PUT:/user": admin.AdminUser.UpdateAdminUser,
+					// 查询管理员
+					"GET:/user": admin.AdminUser.GetAdminUser,
+				})
+			})
+
+			serverWg.Add(1)
+			// 信号监听
+			signalListen(ctx, signalHandlerForOverall)
+			go func() {
+				<-serverCloseSignal
+				g.Log().Debug(ctx, "Http已成功关闭")
+				serverWg.Done()
+			}()
 
 			s.Run()
 
