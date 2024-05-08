@@ -12,12 +12,18 @@ import (
 
 type (
 	IAdminUser interface {
+		// CheckAccount
+		CheckAccount(ctx context.Context, account string) (bool, error)
 		// 增加管理员
 		AddAdminUser(ctx context.Context, in *admin.AddAdminUserReq) (err error)
 		// 更新管理员
 		UpdateAdminUser(ctx context.Context, in *admin.UpdateAdminUserReq) (err error)
 		// 查询管理员
-		GetAdminUser(ctx context.Context, in *admin.GetAdminUserReq) (res *admin.AdminUserRes, err error)
+		GetAdminUser(ctx context.Context, in *admin.GetAdminUserReq) (res *admin.AdminUserListRes, err error)
+		// 查询管理员列表数量
+		GetAdminUserCount(ctx context.Context) (res int, err error)
+		// 查询管理员列表
+		GetAdminUserList(ctx context.Context, in *admin.GetAdminUserListReq) (res []*admin.AdminUserListRes, err error)
 	}
 )
 

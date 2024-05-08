@@ -74,8 +74,10 @@ var (
 					"POST:/user": admin.AdminUser.AddAdminUser,
 					// 修改管理员
 					"PUT:/user": admin.AdminUser.UpdateAdminUser,
-					// 查询管理员
+					// 查询管理员列表
 					"GET:/user": admin.AdminUser.GetAdminUser,
+					// 查询管理员列表
+					"GET:/user/list": admin.AdminUser.GetAdminUserList,
 				})
 			})
 

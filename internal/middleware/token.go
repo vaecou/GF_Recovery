@@ -6,6 +6,7 @@ import (
 	"GF_Recovery/internal/model/entity"
 	"GF_Recovery/utility/validate"
 	"context"
+	"fmt"
 	"time"
 
 	"github.com/goflyfox/gtoken/gtoken"
@@ -110,10 +111,16 @@ func adminUserLoginBefore(r *ghttp.Request) (id string, data interface{}) {
 		"account":    mb.Account,
 		"created_at": mb.CreatedAt,
 	}
+
+	// 将name存储至ctx中
+	r.SetCtxVar("name", mb.Name)
+	// 将account存储至ctx中
+	r.SetCtxVar("account", mb.Account)
+
 	return
 }
 
-// 自定义登录返回的格式
+// 自定义登录后的记录
 func adminUserLoginAfter(r *ghttp.Request, respData gtoken.Resp) {
 	var (
 		msg  string
@@ -124,8 +131,11 @@ func adminUserLoginAfter(r *ghttp.Request, respData gtoken.Resp) {
 
 	if respData.Success() {
 		code = gcode.CodeOK
+		fmt.Println("respData", respData)
 		res = g.Map{
-			"token": respData.GetString("token"),
+			"name":    r.GetCtxVar("name"),
+			"account": r.GetCtxVar("account"),
+			"token":   respData.GetString("token"),
 		}
 	}
 
