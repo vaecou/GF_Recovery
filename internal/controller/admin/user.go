@@ -32,9 +32,9 @@ func (c *cAdminUser) AddAdminUser(ctx context.Context, req *admin.AddAdminUserRe
 func (c *cAdminUser) UpdateAdminUser(ctx context.Context, req *admin.UpdateAdminUserReq) (res *admin.AdminUserRes, err error) {
 	err = service.AdminUser().UpdateAdminUser(ctx, req)
 	if err != nil {
-		return nil, err
+		return
 	}
-	return nil, nil
+	return
 }
 
 // 查询管理员

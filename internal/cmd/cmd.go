@@ -87,6 +87,16 @@ var (
 					// 查询设置
 					"GET:/about": admin.Setting.GetSetting,
 				})
+				group.Map(g.Map{
+					// 增加问题
+					"POST:/question": admin.Question.AddQuestion,
+					// 修改问题
+					"PUT:/question": admin.Question.UpdateQuestion,
+					// 删除问题
+					"DELETE:/question": admin.Question.DeleteQuestion,
+					// 查询问题列表
+					"GET:/question/list": admin.Question.GetQuestionList,
+				})
 			})
 
 			serverWg.Add(1)

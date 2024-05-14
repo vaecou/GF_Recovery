@@ -11,14 +11,28 @@ import (
 )
 
 type (
+	IQuestion interface {
+		// 查询问题是否存在
+		CheckQuestion(ctx context.Context, title string) (ok bool)
+		// 增加问题
+		AddQuestion(ctx context.Context, in *admin.AddQuestionReq) (err error)
+		// 更新问题
+		UpdateQuestion(ctx context.Context, in *admin.UpdateQuestionReq) (err error)
+		// 查询管理员列表数量
+		GetQuestionCount(ctx context.Context) (res int, err error)
+		// 获取问题列表
+		GetQuestionList(ctx context.Context, in *admin.GetQuestionListReq) (res []*admin.QuestionListRes, err error)
+		// 删除问题
+		DeleteQuestion(ctx context.Context, in *admin.DeleteQuestionReq) (err error)
+	}
 	ISetting interface {
 		// 检查是否存在Key
 		CheckKey(ctx context.Context, key string) (ok bool)
-		// 添加关于我们到数据库
+		// 添加设置到数据库
 		AddSetting(ctx context.Context, in *admin.AddOrUpdateSettingReq) (err error)
-		// 更新关于我们到数据库
+		// 更新设置到数据库
 		UpdateSetting(ctx context.Context, in *admin.AddOrUpdateSettingReq) (err error)
-		// 查询关于我们
+		// 查询设置
 		GetSetting(ctx context.Context, in *admin.GetSettingReq) (res *admin.SettingRes, err error)
 	}
 	IAdminUser interface {
@@ -38,9 +52,21 @@ type (
 )
 
 var (
+	localQuestion  IQuestion
 	localSetting   ISetting
 	localAdminUser IAdminUser
 )
+
+func Question() IQuestion {
+	if localQuestion == nil {
+		panic("implement not found for interface IQuestion, forgot register?")
+	}
+	return localQuestion
+}
+
+func RegisterQuestion(i IQuestion) {
+	localQuestion = i
+}
 
 func Setting() ISetting {
 	if localSetting == nil {
