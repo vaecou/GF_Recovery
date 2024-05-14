@@ -5,7 +5,6 @@ import (
 	"GF_Recovery/internal/dao"
 	"GF_Recovery/internal/service"
 	"context"
-	"fmt"
 
 	"github.com/gogf/gf/v2/crypto/gmd5"
 	"github.com/gogf/gf/v2/errors/gerror"
@@ -23,16 +22,16 @@ func NewUser() *sAdminUser {
 	return &sAdminUser{}
 }
 
-// 检查账号是否重复
-func (s *sAdminUser) CheckAccount(ctx context.Context, account string) (bool, error) {
+// 查询账号是否存在
+func (s *sAdminUser) CheckAccount(ctx context.Context, account string) (ok bool) {
 	count, err := dao.ReAdminUser.Ctx(ctx).Where(dao.ReAdminUser.Columns().Account, account).Count()
 	if err != nil {
-		return false, err
+		return false
 	}
 	if count > 0 {
-		return true, nil
+		return true
 	}
-	return false, nil
+	return
 }
 
 // 增加管理员
@@ -45,7 +44,6 @@ func (s *sAdminUser) AddAdminUser(ctx context.Context, in *admin.AddAdminUserReq
 
 // 更新管理员
 func (s *sAdminUser) UpdateAdminUser(ctx context.Context, in *admin.UpdateAdminUserReq) (err error) {
-	fmt.Println("in", in)
 	if in.Password != "" {
 		in.Salt = grand.S(8)
 		in.Password = gmd5.MustEncryptString(in.Password + in.Salt)

@@ -21,7 +21,7 @@ type ReAdminUserDao struct {
 // ReAdminUserColumns defines and stores column names for table re_admin_user.
 type ReAdminUserColumns struct {
 	Id        string // ID
-	Name      string // 名字
+	Name      string // 昵称
 	Account   string // 账户
 	Password  string // 密码
 	Salt      string // 盐值

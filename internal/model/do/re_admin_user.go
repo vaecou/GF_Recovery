@@ -13,7 +13,7 @@ import (
 type ReAdminUser struct {
 	g.Meta    `orm:"table:re_admin_user, do:true"`
 	Id        interface{} // ID
-	Name      interface{} // 名字
+	Name      interface{} // 昵称
 	Account   interface{} // 账户
 	Password  interface{} // 密码
 	Salt      interface{} // 盐值

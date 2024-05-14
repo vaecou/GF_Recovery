@@ -15,11 +15,7 @@ type cAdminUser struct {
 
 // 增加管理员
 func (c *cAdminUser) AddAdminUser(ctx context.Context, req *admin.AddAdminUserReq) (res *admin.AdminUserRes, err error) {
-	// 检测账号是否已存在
-	ok, err := service.AdminUser().CheckAccount(ctx, req.Account)
-	if err != nil {
-		return
-	}
+	ok := service.AdminUser().CheckAccount(ctx, req.Account)
 	if ok {
 		err = gerror.New("该账号已存在")
 		return
@@ -34,20 +30,11 @@ func (c *cAdminUser) AddAdminUser(ctx context.Context, req *admin.AddAdminUserRe
 
 // 更新管理员
 func (c *cAdminUser) UpdateAdminUser(ctx context.Context, req *admin.UpdateAdminUserReq) (res *admin.AdminUserRes, err error) {
-	// 检测账号是否已存在
-	ok, err := service.AdminUser().CheckAccount(ctx, req.Account)
-	if err != nil {
-		return
-	}
-	if ok {
-		err = gerror.New("该账号已存在")
-		return
-	}
 	err = service.AdminUser().UpdateAdminUser(ctx, req)
 	if err != nil {
-		return
+		return nil, err
 	}
-	return
+	return nil, nil
 }
 
 // 查询管理员

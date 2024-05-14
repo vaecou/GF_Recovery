@@ -11,7 +11,7 @@ import (
 // ReAdminUser is the golang structure for table re_admin_user.
 type ReAdminUser struct {
 	Id        int         `json:"id"         orm:"id"         ` // ID
-	Name      string      `json:"name"       orm:"name"       ` // 名字
+	Name      string      `json:"name"       orm:"name"       ` // 昵称
 	Account   string      `json:"account"    orm:"account"    ` // 账户
 	Password  string      `json:"password"   orm:"password"   ` // 密码
 	Salt      string      `json:"salt"       orm:"salt"       ` // 盐值

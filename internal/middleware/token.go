@@ -31,7 +31,7 @@ func AdiminUserToken(ctx context.Context, group *ghttp.RouterGroup) {
 		LoginAfterFunc:   adminUserLoginAfter,
 		LogoutPath:       "DELETE:/login",
 		AuthAfterFunc:    adminUserAuthAfter,
-		AuthExcludePaths: g.SliceStr{"/admin/login"},
+		AuthExcludePaths: g.SliceStr{"/admin/login", "GET:/admin/setting"},
 		CacheMode:        2,
 		CacheKey:         "Admin:User:Login:User_ID_",
 		Timeout:          gconv.Int(time.Hour.Milliseconds()),

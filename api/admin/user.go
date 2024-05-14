@@ -19,7 +19,6 @@ type UpdateAdminUserReq struct {
 
 	ID       int    `json:"id"`
 	Name     string `json:"name" v:"required#名字不能为空"`
-	Account  string `json:"account" v:"required#账号不能为空"`
 	Password string `json:"password" v:"password#密码长度在6-18位之间"`
 	Status   *bool  `json:"status"`
 	Salt     string
@@ -28,7 +27,8 @@ type UpdateAdminUserReq struct {
 type GetAdminUserReq struct {
 	g.Meta `path:"/user" tags:"管理员" summary:"查询管理员"`
 
-	ID int `json:"id" v:"required#ID不能为空"`
+	ID      int    `json:"id" v:"required#ID不能为空"`
+	Account string `json:"account"`
 }
 
 type GetAdminUserListReq struct {

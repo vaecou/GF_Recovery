@@ -11,9 +11,19 @@ import (
 )
 
 type (
+	ISetting interface {
+		// 检查是否存在Key
+		CheckKey(ctx context.Context, key string) (ok bool)
+		// 添加关于我们到数据库
+		AddSetting(ctx context.Context, in *admin.AddOrUpdateSettingReq) (err error)
+		// 更新关于我们到数据库
+		UpdateSetting(ctx context.Context, in *admin.AddOrUpdateSettingReq) (err error)
+		// 查询关于我们
+		GetSetting(ctx context.Context, in *admin.GetSettingReq) (res *admin.SettingRes, err error)
+	}
 	IAdminUser interface {
-		// CheckAccount
-		CheckAccount(ctx context.Context, account string) (bool, error)
+		// 查询账号是否存在
+		CheckAccount(ctx context.Context, account string) (ok bool)
 		// 增加管理员
 		AddAdminUser(ctx context.Context, in *admin.AddAdminUserReq) (err error)
 		// 更新管理员
@@ -28,8 +38,20 @@ type (
 )
 
 var (
+	localSetting   ISetting
 	localAdminUser IAdminUser
 )
+
+func Setting() ISetting {
+	if localSetting == nil {
+		panic("implement not found for interface ISetting, forgot register?")
+	}
+	return localSetting
+}
+
+func RegisterSetting(i ISetting) {
+	localSetting = i
+}
 
 func AdminUser() IAdminUser {
 	if localAdminUser == nil {

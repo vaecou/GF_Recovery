@@ -79,6 +79,14 @@ var (
 					// 查询管理员列表
 					"GET:/user/list": admin.AdminUser.GetAdminUserList,
 				})
+				group.Map(g.Map{
+					// 增加设置
+					"POST:/about": admin.Setting.AddOrUpdateSetting,
+					// 修改设置
+					"PUT:/about": admin.Setting.AddOrUpdateSetting,
+					// 查询设置
+					"GET:/about": admin.Setting.GetSetting,
+				})
 			})
 
 			serverWg.Add(1)
