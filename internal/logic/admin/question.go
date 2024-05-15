@@ -50,7 +50,16 @@ func (s *sQuestion) UpdateQuestion(ctx context.Context, in *admin.UpdateQuestion
 	return
 }
 
-// 查询管理员列表数量
+// 获取问题
+func (s *sQuestion) GetQuestion(ctx context.Context, in *admin.GetQuestionReq) (res *admin.QuestionListRes, err error) {
+	err = dao.ReQuestion.Ctx(ctx).Where("id", in.ID).Scan(&res)
+	if err != nil {
+		return
+	}
+	return
+}
+
+// 查询问题列表数量
 func (s *sQuestion) GetQuestionCount(ctx context.Context) (res int, err error) {
 	res, err = dao.ReQuestion.Ctx(ctx).Count()
 	if err != nil {

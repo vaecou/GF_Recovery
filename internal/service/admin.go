@@ -18,7 +18,9 @@ type (
 		AddQuestion(ctx context.Context, in *admin.AddQuestionReq) (err error)
 		// 更新问题
 		UpdateQuestion(ctx context.Context, in *admin.UpdateQuestionReq) (err error)
-		// 查询管理员列表数量
+		// 获取问题
+		GetQuestion(ctx context.Context, in *admin.GetQuestionReq) (res *admin.QuestionListRes, err error)
+		// 查询问题列表数量
 		GetQuestionCount(ctx context.Context) (res int, err error)
 		// 获取问题列表
 		GetQuestionList(ctx context.Context, in *admin.GetQuestionListReq) (res []*admin.QuestionListRes, err error)

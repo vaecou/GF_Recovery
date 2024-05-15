@@ -17,6 +17,12 @@ type UpdateQuestionReq struct {
 	Content string `json:"content" v:"required#内容不能为空"`
 }
 
+type GetQuestionReq struct {
+	g.Meta `path:"/question" tags:"问题" summary:"查询问题"`
+
+	ID int `json:"id" v:"required#ID不能为空"`
+}
+
 type GetQuestionListReq struct {
 	g.Meta `path:"/question/list" tags:"问题" summary:"查询问题列表"`
 

@@ -94,6 +94,8 @@ var (
 					"PUT:/question": admin.Question.UpdateQuestion,
 					// 删除问题
 					"DELETE:/question": admin.Question.DeleteQuestion,
+					// 查询问题
+					"GET:/question": admin.Question.GetQuestion,
 					// 查询问题列表
 					"GET:/question/list": admin.Question.GetQuestionList,
 				})

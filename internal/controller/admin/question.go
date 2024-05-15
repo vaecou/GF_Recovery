@@ -37,6 +37,15 @@ func (c *cQuestion) UpdateQuestion(ctx context.Context, req *admin.UpdateQuestio
 	return
 }
 
+// 查询问题
+func (c *cQuestion) GetQuestion(ctx context.Context, req *admin.GetQuestionReq) (res *admin.QuestionListRes, err error) {
+	res, err = service.Question().GetQuestion(ctx, req)
+	if err != nil {
+		return
+	}
+	return
+}
+
 // 获取问题列表
 func (c *cQuestion) GetQuestionList(ctx context.Context, req *admin.GetQuestionListReq) (res *admin.QuestionRes, err error) {
 	res = &admin.QuestionRes{}
