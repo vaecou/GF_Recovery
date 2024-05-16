@@ -99,6 +99,18 @@ var (
 					// 查询问题列表
 					"GET:/question/list": admin.Question.GetQuestionList,
 				})
+				group.Map(g.Map{
+					// 增加地区
+					"POST:/regions": admin.Regions.AddRegions,
+					// 修改地区
+					"PUT:/regions": admin.Regions.UpdateRegions,
+					// 删除地区
+					"DELETE:/regions": admin.Regions.DeleteRegions,
+					// 查询地区
+					"GET:/regions": admin.Regions.GetRegions,
+					// 查询地区列表
+					"GET:/regions/list": admin.Regions.GetRegionsList,
+				})
 			})
 
 			serverWg.Add(1)

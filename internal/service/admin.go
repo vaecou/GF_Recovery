@@ -27,6 +27,18 @@ type (
 		// 删除问题
 		DeleteQuestion(ctx context.Context, in *admin.DeleteQuestionReq) (err error)
 	}
+	IRegions interface {
+		// 增加地区
+		AddRegions(ctx context.Context, in *admin.AddRegionsReq) (err error)
+		// 更新地区
+		UpdateRegions(ctx context.Context, in *admin.UpdateRegionsReq) (err error)
+		// 删除地区
+		DeleteRegions(ctx context.Context, in *admin.DeleteRegionsReq) (err error)
+		// 获取地区
+		GetRegions(ctx context.Context, in *admin.GetRegionsReq) (res *admin.RegionsRes, err error)
+		// 获取地区列表
+		GetRegionsList(ctx context.Context, in *admin.GetRegionsListReq) (res []*admin.RegionsRes, err error)
+	}
 	ISetting interface {
 		// 检查是否存在Key
 		CheckKey(ctx context.Context, key string) (ok bool)
@@ -55,6 +67,7 @@ type (
 
 var (
 	localQuestion  IQuestion
+	localRegions   IRegions
 	localSetting   ISetting
 	localAdminUser IAdminUser
 )
@@ -68,6 +81,17 @@ func Question() IQuestion {
 
 func RegisterQuestion(i IQuestion) {
 	localQuestion = i
+}
+
+func Regions() IRegions {
+	if localRegions == nil {
+		panic("implement not found for interface IRegions, forgot register?")
+	}
+	return localRegions
+}
+
+func RegisterRegions(i IRegions) {
+	localRegions = i
 }
 
 func Setting() ISetting {
