@@ -13,5 +13,6 @@ type ReRegions struct {
 	g.Meta   `orm:"table:re_regions, do:true"`
 	Id       interface{} // ID
 	ParentId interface{} // 父ID
+	Sort     interface{} // 排序
 	Regions  interface{} // 值
 }

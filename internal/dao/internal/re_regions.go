@@ -22,6 +22,7 @@ type ReRegionsDao struct {
 type ReRegionsColumns struct {
 	Id       string // ID
 	ParentId string // 父ID
+	Sort     string // 排序
 	Regions  string // 值
 }
 
@@ -29,6 +30,7 @@ type ReRegionsColumns struct {
 var reRegionsColumns = ReRegionsColumns{
 	Id:       "id",
 	ParentId: "parent_id",
+	Sort:     "sort",
 	Regions:  "regions",
 }
 

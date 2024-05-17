@@ -8,5 +8,6 @@ package entity
 type ReRegions struct {
 	Id       int    `json:"id"        orm:"id"        ` // ID
 	ParentId int    `json:"parent_id" orm:"parent_id" ` // 父ID
+	Sort     int    `json:"sort"      orm:"sort"      ` // 排序
 	Regions  string `json:"regions"   orm:"regions"   ` // 值
 }

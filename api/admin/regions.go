@@ -6,7 +6,6 @@ type AddRegionsReq struct {
 	g.Meta `path:"/regions" tags:"地区" summary:"增加地区"`
 
 	ParentID int    `json:"parent_id"`
-	Sort     int    `json:"sort" v:"required#Sort不能为空"`
 	Regions  string `json:"regions" v:"required#地区不能为空"`
 }
 

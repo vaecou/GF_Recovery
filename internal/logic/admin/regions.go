@@ -3,11 +3,10 @@ package admin
 import (
 	"GF_Recovery/api/admin"
 	"GF_Recovery/internal/dao"
+	"GF_Recovery/internal/model/do"
 	"GF_Recovery/internal/service"
 	"context"
 	"sort"
-
-	"github.com/gogf/gf/v2/errors/gerror"
 )
 
 type sRegions struct {
@@ -23,18 +22,29 @@ func NewRegions() *sRegions {
 
 // 增加地区
 func (s *sRegions) AddRegions(ctx context.Context, in *admin.AddRegionsReq) (err error) {
-	_, err = dao.ReRegions.Ctx(ctx).Insert(in)
+	result, err := dao.ReRegions.Ctx(ctx).Insert(in)
+	if err != nil {
+		return
+	}
+	LastInsertId, err := result.LastInsertId()
+	if err != nil {
+		return
+	}
+	region := &do.ReRegions{
+		Sort: LastInsertId * 1024,
+	}
+	_, err = dao.ReRegions.Ctx(ctx).OmitNil().Where("id", LastInsertId).UpdateAndGetAffected(region)
+	if err != nil {
+		return
+	}
 	return
 }
 
 // 更新地区
 func (s *sRegions) UpdateRegions(ctx context.Context, in *admin.UpdateRegionsReq) (err error) {
-	affected, err := dao.ReRegions.Ctx(ctx).OmitEmpty().Where("id", in.ID).UpdateAndGetAffected(in)
+	_, err = dao.ReRegions.Ctx(ctx).OmitNil().Where("id", in.ID).UpdateAndGetAffected(in)
 	if err != nil {
 		return
-	}
-	if affected == 0 {
-		err = gerror.New("该问题不存在")
 	}
 	return
 }
@@ -75,19 +85,32 @@ func (s *sRegions) GetRegionsList(ctx context.Context, in *admin.GetRegionsListR
 		}
 	}
 
-	// 第三步：通过将子节点分配给各自的父节点来构建树形结构
+	// 找出顶级节点
 	var roots []*admin.RegionsRes
 	for _, region := range regionMap {
 		if region.ParentID == 0 {
 			// 根节点
 			roots = append(roots, region)
-		} else {
-			// 非根节点，找到其父节点并将该节点添加到父节点的子节点列表中
+		}
+	}
+
+	// 第三步：通过将子节点分配给各自的父节点来构建树形结构，并对顶级节点排序
+	for _, region := range regionMap {
+		if region.ParentID != 0 {
+			// 非顶级节点，找到其父节点并将该节点添加到父节点的子节点列表中
 			if parent, exists := regionMap[region.ParentID]; exists {
 				parent.Children = append(parent.Children, region)
+			} else {
+				// 如果父节点不存在，说明当前节点是顶级节点
+				roots = append(roots, region)
 			}
 		}
 	}
+
+	// 对顶级节点按照排序字段排序
+	sort.Slice(roots, func(i, j int) bool {
+		return roots[i].Sort < roots[j].Sort
+	})
 
 	// 第四步：对每个节点的子节点进行排序
 	var sortChildren func(node *admin.RegionsRes)
