@@ -2,7 +2,6 @@ package cmd
 
 import (
 	"context"
-	"time"
 
 	"GF_Recovery/internal/consts"
 	"GF_Recovery/internal/controller/admin"
@@ -57,7 +56,7 @@ var (
 			s := g.Server()
 
 			// Session配置
-			s.SetSessionMaxAge(time.Hour)                                                  // 1小时的Session有效期
+			// s.SetSessionMaxAge(7 * 24 * time.Hour)                                         // 1小时的Session有效期
 			s.SetSessionStorage(gsession.NewStorageRedis(g.Redis(), consts.SessionPrefix)) // 使用Redis存储Session
 
 			// 注册全局中间件
@@ -111,6 +110,12 @@ var (
 					// 查询地区列表
 					"GET:/regions/list": admin.Regions.GetRegionsList,
 				})
+			})
+
+			s.Group("/mini", func(group *ghttp.RouterGroup) {
+				// 注册分组中间件
+				middleware.MiniUserToken(ctx, group) // Token以及登录中间件
+				group.Map(g.Map{})
 			})
 
 			serverWg.Add(1)

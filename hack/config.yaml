@@ -6,7 +6,7 @@ gfcli:
       dao:
         link: "mysql:root:root@tcp(127.0.0.1:3306)/recovery?loc=Local&parseTime=true&charset=utf8mb4"
         #生成的表
-        tables: "re_admin_user,re_setting,re_question,re_regions"
+        tables: "re_admin_user,re_setting,re_question,re_regions,re_user"
         #使用下划线命名法
         jsonCase: "Snake"
 

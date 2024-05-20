@@ -16,14 +16,12 @@ type cSetting struct {
 func (c *cSetting) AddOrUpdateSetting(ctx context.Context, req *admin.AddOrUpdateSettingReq) (res *admin.SettingRes, err error) {
 	// 检查是否存在key
 	if service.Setting().CheckKey(ctx, req.Key) {
-		fmt.Println("111")
 		// 更新
 		err = service.Setting().UpdateSetting(ctx, req)
 		if err != nil {
 			return nil, err
 		}
 	} else {
-		fmt.Println("222")
 		err = service.Setting().AddSetting(ctx, req)
 		if err != nil {
 			return nil, err

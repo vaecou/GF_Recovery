@@ -3,12 +3,15 @@ package middleware
 import (
 	"GF_Recovery/internal/consts"
 	"GF_Recovery/internal/dao"
+	"GF_Recovery/internal/model/do"
 	"GF_Recovery/internal/model/entity"
 	"GF_Recovery/utility/validate"
 	"context"
 	"fmt"
 	"time"
 
+	"github.com/ArtisanCloud/PowerWeChat/v3/src/kernel"
+	"github.com/ArtisanCloud/PowerWeChat/v3/src/miniProgram"
 	"github.com/goflyfox/gtoken/gtoken"
 	"github.com/gogf/gf/v2/errors/gcode"
 	"github.com/gogf/gf/v2/errors/gerror"
@@ -30,8 +33,8 @@ func AdiminUserToken(ctx context.Context, group *ghttp.RouterGroup) {
 		LoginBeforeFunc:  adminUserLoginBefore,
 		LoginAfterFunc:   adminUserLoginAfter,
 		LogoutPath:       "DELETE:/login",
-		AuthAfterFunc:    adminUserAuthAfter,
-		AuthExcludePaths: g.SliceStr{"/admin/login", "GET:/admin/setting", "GET:/admin/question/list"},
+		AuthAfterFunc:    userAuthAfter,
+		AuthExcludePaths: g.SliceStr{"/admin/login"},
 		CacheMode:        2,
 		CacheKey:         "Admin:User:Login:User_ID_",
 		Timeout:          gconv.Int(time.Hour.Milliseconds()),
@@ -147,7 +150,7 @@ func adminUserLoginAfter(r *ghttp.Request, respData gtoken.Resp) {
 }
 
 // 自定义验证返回的格式
-func adminUserAuthAfter(r *ghttp.Request, respData gtoken.Resp) {
+func userAuthAfter(r *ghttp.Request, respData gtoken.Resp) {
 	var (
 		msg  string
 		err  = r.GetError()
@@ -161,6 +164,112 @@ func adminUserAuthAfter(r *ghttp.Request, respData gtoken.Resp) {
 	} else {
 		code = gcode.CodeNotAuthorized
 		msg = "Token验证失败"
+	}
+
+	r.Response.WriteJson(DefaultHandlerResponse{
+		Code:    code.Code(),
+		Message: msg,
+		Data:    res,
+	})
+}
+
+func MiniUserToken(ctx context.Context, group *ghttp.RouterGroup) {
+	// 启动gtoken
+	gtoken := &gtoken.GfToken{
+		LoginPath:        "POST:/login",
+		LoginBeforeFunc:  miniUserLoginBefore,
+		LoginAfterFunc:   miniUserLoginAfter,
+		LogoutPath:       "DELETE:/login",
+		AuthAfterFunc:    userAuthAfter,
+		AuthExcludePaths: g.SliceStr{"/mini/login"},
+		CacheMode:        2,
+		CacheKey:         "Mini:User:Login:User_ID_",
+		Timeout:          31536000000,
+		EncryptKey:       gconv.UnsafeStrToBytes("75315978932147857291236985632147"),
+	}
+	err := gtoken.Middleware(ctx, group)
+	if err != nil {
+		panic(err)
+	}
+}
+
+func miniUserLoginBefore(r *ghttp.Request) (id string, data interface{}) {
+	ctx := r.GetCtx()
+	code := r.GetForm("code").String()
+	if code == "" {
+		r.Response.WriteJson(DefaultHandlerResponse{
+			Code:    gcode.CodeValidationFailed.Code(),
+			Message: "Code不能为空",
+		})
+		return
+	}
+
+	appid := g.Cfg().MustGet(ctx, "miniprogram.appid").String()
+	secret := g.Cfg().MustGet(ctx, "miniprogram.secret").String()
+	addrs := g.Cfg().MustGet(ctx, "redis.default.address").String()
+	MiniProgramApp, err := miniProgram.NewMiniProgram(&miniProgram.UserConfig{
+		AppID:     appid,  // 小程序appid
+		Secret:    secret, // 小程序app secret
+		HttpDebug: true,
+		// 可选，不传默认走程序内存
+		Cache: kernel.NewRedisClient(&kernel.UniversalOptions{
+			Addrs:    []string{addrs},
+			Password: "",
+			DB:       0,
+		}),
+	})
+	if err != nil {
+		panic(err)
+	}
+
+	res, err := MiniProgramApp.Auth.Session(ctx, code)
+	if err != nil {
+		panic(err)
+	}
+
+	var mb *entity.ReAdminUser
+	if err := dao.ReUser.Ctx(ctx).Where("unionid", res.UnionID).Scan(&mb); err != nil {
+		r.Response.WriteJson(DefaultHandlerResponse{
+			Code:    gcode.CodeInternalError.Code(),
+			Message: consts.ErrorORM,
+		})
+		return
+	}
+	// 不存在unionid
+	if mb == nil {
+		user := &do.ReUser{
+			Openid:  res.OpenID,
+			Unionid: res.UnionID,
+			Status:  0,
+		}
+		_, err = dao.ReUser.Ctx(ctx).Insert(user)
+		if err != nil {
+			panic(err)
+		}
+	}
+
+	id = res.UnionID
+	data = g.Map{
+		"openid":  res.OpenID,
+		"unionid": res.UnionID,
+	}
+	return
+}
+
+func miniUserLoginAfter(r *ghttp.Request, respData gtoken.Resp) {
+	var (
+		msg  string
+		err  = r.GetError()
+		res  = r.GetHandlerResponse()
+		code = gerror.Code(err)
+	)
+
+	if respData.Success() {
+		code = gcode.CodeOK
+		fmt.Println("respData", respData)
+		res = g.Map{
+			"token": respData.GetString("token"),
+		}
 	}
 
 	r.Response.WriteJson(DefaultHandlerResponse{

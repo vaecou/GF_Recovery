@@ -6,4 +6,5 @@ package logic
 
 import (
 	_ "GF_Recovery/internal/logic/admin"
+	_ "GF_Recovery/internal/logic/mini"
 )
