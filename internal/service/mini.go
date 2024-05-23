@@ -5,21 +5,45 @@
 
 package service
 
+import (
+	"GF_Recovery/api/mini"
+	"context"
+)
+
 type (
-	IMiniUser interface{}
+	IMiniHome interface {
+		// 获取使用次数数量
+		GetNum(ctx context.Context, req *mini.GetNumReq) (res *mini.GetNumRes, err error)
+	}
+	IMiniQuestion interface {
+		// 随机获取问题列表
+		GetQuestion(ctx context.Context, req *mini.GetQuestionReq) (res []*mini.GetQuestionRes, err error)
+	}
 )
 
 var (
-	localMiniUser IMiniUser
+	localMiniHome     IMiniHome
+	localMiniQuestion IMiniQuestion
 )
 
-func MiniUser() IMiniUser {
-	if localMiniUser == nil {
-		panic("implement not found for interface IMiniUser, forgot register?")
+func MiniHome() IMiniHome {
+	if localMiniHome == nil {
+		panic("implement not found for interface IMiniHome, forgot register?")
 	}
-	return localMiniUser
+	return localMiniHome
 }
 
-func RegisterMiniUser(i IMiniUser) {
-	localMiniUser = i
+func RegisterMiniHome(i IMiniHome) {
+	localMiniHome = i
+}
+
+func MiniQuestion() IMiniQuestion {
+	if localMiniQuestion == nil {
+		panic("implement not found for interface IMiniQuestion, forgot register?")
+	}
+	return localMiniQuestion
+}
+
+func RegisterMiniQuestion(i IMiniQuestion) {
+	localMiniQuestion = i
 }

@@ -20,30 +20,28 @@ type ReUserDao struct {
 
 // ReUserColumns defines and stores column names for table re_user.
 type ReUserColumns struct {
-	Id         string // ID
-	Balance    string // 余额
-	Phone      string // 手机号
-	Openid     string // 小程序用户OpenID
-	Unionid    string // 小程序用户UnionID
-	Status     string // 状态值
-	LastActive string // 最近活跃时间
-	CreatedAt  string // 创建时间
-	UpdatedAt  string // 更新时间
-	DeletedAt  string // 删除时间
+	Id        string // ID
+	Balance   string // 余额
+	Phone     string // 手机号
+	Openid    string // 小程序用户OpenID
+	Unionid   string // 小程序用户UnionID
+	Status    string // 状态值
+	CreatedAt string // 创建时间
+	UpdatedAt string // 更新时间
+	DeletedAt string // 删除时间
 }
 
 // reUserColumns holds the columns for table re_user.
 var reUserColumns = ReUserColumns{
-	Id:         "id",
-	Balance:    "balance",
-	Phone:      "phone",
-	Openid:     "openid",
-	Unionid:    "unionid",
-	Status:     "status",
-	LastActive: "last_active",
-	CreatedAt:  "created_at",
-	UpdatedAt:  "updated_at",
-	DeletedAt:  "deleted_at",
+	Id:        "id",
+	Balance:   "balance",
+	Phone:     "phone",
+	Openid:    "openid",
+	Unionid:   "unionid",
+	Status:    "status",
+	CreatedAt: "created_at",
+	UpdatedAt: "updated_at",
+	DeletedAt: "deleted_at",
 }
 
 // NewReUserDao creates and returns a new DAO object for table data access.

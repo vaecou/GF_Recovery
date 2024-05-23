@@ -5,6 +5,7 @@ import (
 
 	"GF_Recovery/internal/consts"
 	"GF_Recovery/internal/controller/admin"
+	"GF_Recovery/internal/controller/mini"
 	"GF_Recovery/internal/middleware"
 	"GF_Recovery/utility/simple"
 
@@ -69,6 +70,10 @@ var (
 				// 注册分组中间件
 				middleware.AdiminUserToken(ctx, group) // Token以及登录中间件
 				group.Map(g.Map{
+					// 查询用户列表
+					"GET:/mini_user/list": admin.MiniUser.GetMiniUserList,
+				})
+				group.Map(g.Map{
 					// 增加管理员
 					"POST:/user": admin.AdminUser.AddAdminUser,
 					// 修改管理员
@@ -115,7 +120,11 @@ var (
 			s.Group("/mini", func(group *ghttp.RouterGroup) {
 				// 注册分组中间件
 				middleware.MiniUserToken(ctx, group) // Token以及登录中间件
-				group.Map(g.Map{})
+				group.Map(g.Map{
+					// 查询使用数量
+					"GET:/num":      mini.Home.GetNum,
+					"GET:/question": mini.Question.GetQuestion,
+				})
 			})
 
 			serverWg.Add(1)

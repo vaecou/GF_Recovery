@@ -181,7 +181,7 @@ func MiniUserToken(ctx context.Context, group *ghttp.RouterGroup) {
 		LoginAfterFunc:   miniUserLoginAfter,
 		LogoutPath:       "DELETE:/login",
 		AuthAfterFunc:    userAuthAfter,
-		AuthExcludePaths: g.SliceStr{"/mini/login"},
+		AuthExcludePaths: g.SliceStr{"/mini/login", "/mini/num", "/mini/question"},
 		CacheMode:        2,
 		CacheKey:         "Mini:User:Login:User_ID_",
 		Timeout:          31536000000,

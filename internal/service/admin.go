@@ -11,6 +11,12 @@ import (
 )
 
 type (
+	IMiniUser interface {
+		// 查询管理员列表数量
+		GetMiniUserCount(ctx context.Context) (res int, err error)
+		// 查询管理员列表
+		GetMiniUserList(ctx context.Context, in *admin.GetMiniUserListReq) (res []*admin.MiniUserListRes, err error)
+	}
 	IQuestion interface {
 		// 查询问题是否存在
 		CheckQuestion(ctx context.Context, title string) (ok bool)
@@ -66,11 +72,23 @@ type (
 )
 
 var (
+	localMiniUser  IMiniUser
 	localQuestion  IQuestion
 	localRegions   IRegions
 	localSetting   ISetting
 	localAdminUser IAdminUser
 )
+
+func MiniUser() IMiniUser {
+	if localMiniUser == nil {
+		panic("implement not found for interface IMiniUser, forgot register?")
+	}
+	return localMiniUser
+}
+
+func RegisterMiniUser(i IMiniUser) {
+	localMiniUser = i
+}
 
 func Question() IQuestion {
 	if localQuestion == nil {
