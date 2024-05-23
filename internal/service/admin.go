@@ -12,10 +12,12 @@ import (
 
 type (
 	IMiniUser interface {
-		// 查询管理员列表数量
-		GetMiniUserCount(ctx context.Context) (res int, err error)
-		// 查询管理员列表
-		GetMiniUserList(ctx context.Context, in *admin.GetMiniUserListReq) (res []*admin.MiniUserListRes, err error)
+		// 查询用户列表数量
+		GetMiniUserCount(ctx context.Context, in *admin.GetMiniUserListReq) (int, error)
+		// 查询用户列表
+		GetMiniUserList(ctx context.Context, in *admin.GetMiniUserListReq) ([]*admin.MiniUserListRes, error)
+		// 更新用户
+		UpdateMiniUser(ctx context.Context, in *admin.UpdateMiniUserReq) (err error)
 	}
 	IQuestion interface {
 		// 查询问题是否存在

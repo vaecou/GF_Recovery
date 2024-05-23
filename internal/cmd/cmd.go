@@ -72,6 +72,7 @@ var (
 				group.Map(g.Map{
 					// 查询用户列表
 					"GET:/mini_user/list": admin.MiniUser.GetMiniUserList,
+					"PUT:/mini_user":      admin.MiniUser.UpdateMiniUser,
 				})
 				group.Map(g.Map{
 					// 增加管理员
