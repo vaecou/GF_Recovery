@@ -33,7 +33,7 @@ func AdiminUserToken(ctx context.Context, group *ghttp.RouterGroup) {
 		LoginBeforeFunc:  adminUserLoginBefore,
 		LoginAfterFunc:   adminUserLoginAfter,
 		LogoutPath:       "DELETE:/login",
-		AuthAfterFunc:    userAuthAfter,
+		AuthAfterFunc:    adminUserAuthAfter,
 		AuthExcludePaths: g.SliceStr{"/admin/login"},
 		CacheMode:        2,
 		CacheKey:         "Admin:User:Login:User_ID_",
@@ -134,36 +134,11 @@ func adminUserLoginAfter(r *ghttp.Request, respData gtoken.Resp) {
 
 	if respData.Success() {
 		code = gcode.CodeOK
-		fmt.Println("respData", respData)
 		res = g.Map{
 			"name":    r.GetCtxVar("name"),
 			"account": r.GetCtxVar("account"),
 			"token":   respData.GetString("token"),
 		}
-	}
-
-	r.Response.WriteJson(DefaultHandlerResponse{
-		Code:    code.Code(),
-		Message: msg,
-		Data:    res,
-	})
-}
-
-// 自定义验证返回的格式
-func userAuthAfter(r *ghttp.Request, respData gtoken.Resp) {
-	var (
-		msg  string
-		err  = r.GetError()
-		res  = r.GetHandlerResponse()
-		code = gerror.Code(err)
-	)
-
-	if respData.Success() {
-		r.Middleware.Next()
-		return
-	} else {
-		code = gcode.CodeNotAuthorized
-		msg = "Token验证失败"
 	}
 
 	r.Response.WriteJson(DefaultHandlerResponse{
@@ -180,8 +155,8 @@ func MiniUserToken(ctx context.Context, group *ghttp.RouterGroup) {
 		LoginBeforeFunc:  miniUserLoginBefore,
 		LoginAfterFunc:   miniUserLoginAfter,
 		LogoutPath:       "DELETE:/login",
-		AuthAfterFunc:    userAuthAfter,
-		AuthExcludePaths: g.SliceStr{"/mini/login", "/mini/num", "/mini/question"},
+		AuthAfterFunc:    miniUserAuthAfter,
+		AuthExcludePaths: g.SliceStr{"/mini/login"},
 		CacheMode:        2,
 		CacheKey:         "Mini:User:Login:User_ID_",
 		Timeout:          31536000000,
@@ -235,6 +210,7 @@ func miniUserLoginBefore(r *ghttp.Request) (id string, data interface{}) {
 		})
 		return
 	}
+	var result int64
 	// 不存在unionid
 	if mb == nil {
 		user := &do.ReUser{
@@ -242,13 +218,19 @@ func miniUserLoginBefore(r *ghttp.Request) (id string, data interface{}) {
 			Unionid: res.UnionID,
 			Status:  0,
 		}
-		_, err = dao.ReUser.Ctx(ctx).Insert(user)
+		res, err := dao.ReUser.Ctx(ctx).Insert(user)
 		if err != nil {
 			panic(err)
 		}
+		result, err = res.LastInsertId()
+		if err != nil {
+			panic(err)
+		}
+	} else {
+		result = gconv.Int64(mb.Id)
 	}
 
-	id = res.UnionID
+	id = gconv.String(result)
 	data = g.Map{
 		"openid":  res.OpenID,
 		"unionid": res.UnionID,
@@ -266,10 +248,61 @@ func miniUserLoginAfter(r *ghttp.Request, respData gtoken.Resp) {
 
 	if respData.Success() {
 		code = gcode.CodeOK
-		fmt.Println("respData", respData)
 		res = g.Map{
 			"token": respData.GetString("token"),
 		}
+	}
+
+	r.Response.WriteJson(DefaultHandlerResponse{
+		Code:    code.Code(),
+		Message: msg,
+		Data:    res,
+	})
+}
+
+// 自定义验证返回的格式
+func miniUserAuthAfter(r *ghttp.Request, respData gtoken.Resp) {
+	var (
+		msg  string
+		err  = r.GetError()
+		res  = r.GetHandlerResponse()
+		code = gerror.Code(err)
+	)
+
+	fmt.Println("respData", respData)
+
+	if respData.Success() {
+		r.Middleware.Next()
+		return
+	} else {
+		code = gcode.CodeNotAuthorized
+		msg = "Token验证失败"
+	}
+
+	r.Response.WriteJson(DefaultHandlerResponse{
+		Code:    code.Code(),
+		Message: msg,
+		Data:    res,
+	})
+}
+
+// 自定义验证返回的格式
+func adminUserAuthAfter(r *ghttp.Request, respData gtoken.Resp) {
+	var (
+		msg  string
+		err  = r.GetError()
+		res  = r.GetHandlerResponse()
+		code = gerror.Code(err)
+	)
+
+	fmt.Println("respData", respData)
+
+	if respData.Success() {
+		r.Middleware.Next()
+		return
+	} else {
+		code = gcode.CodeNotAuthorized
+		msg = "Token验证失败"
 	}
 
 	r.Response.WriteJson(DefaultHandlerResponse{
