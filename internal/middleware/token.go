@@ -7,7 +7,6 @@ import (
 	"GF_Recovery/internal/model/entity"
 	"GF_Recovery/utility/validate"
 	"context"
-	"fmt"
 	"time"
 
 	"github.com/ArtisanCloud/PowerWeChat/v3/src/kernel"
@@ -269,9 +268,8 @@ func miniUserAuthAfter(r *ghttp.Request, respData gtoken.Resp) {
 		code = gerror.Code(err)
 	)
 
-	fmt.Println("respData", respData)
-
 	if respData.Success() {
+		r.SetCtxVar("user_id", respData.Get("userKey"))
 		r.Middleware.Next()
 		return
 	} else {
@@ -294,8 +292,6 @@ func adminUserAuthAfter(r *ghttp.Request, respData gtoken.Resp) {
 		res  = r.GetHandlerResponse()
 		code = gerror.Code(err)
 	)
-
-	fmt.Println("respData", respData)
 
 	if respData.Success() {
 		r.Middleware.Next()

@@ -19,7 +19,7 @@ func NewQuestion() *sMiniQuestion {
 }
 
 // 随机获取问题列表
-func (s *sMiniQuestion) GetQuestion(ctx context.Context, req *mini.GetQuestionReq) (res []*mini.GetQuestionRes, err error) {
+func (s *sMiniQuestion) GetQuestion(ctx context.Context, req *mini.GetQuestionReq) (res []*mini.QuestionRes, err error) {
 	err = dao.ReQuestion.Ctx(ctx).OrderRandom().Limit(req.Limit).Scan(&res)
 	if err != nil {
 		return

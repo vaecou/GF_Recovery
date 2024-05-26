@@ -12,7 +12,7 @@ type cQuestion struct {
 }
 
 // 随机获取问题列表
-func (c *cQuestion) GetQuestion(ctx context.Context, req *mini.GetQuestionReq) (res []*mini.GetQuestionRes, err error) {
+func (c *cQuestion) GetQuestion(ctx context.Context, req *mini.GetQuestionReq) (res []*mini.QuestionRes, err error) {
 	// 如果没填limit就默认为3
 	if req.Limit == 0 {
 		req.Limit = 3

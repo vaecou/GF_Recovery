@@ -5,7 +5,7 @@ import (
 )
 
 type AddAdminUserReq struct {
-	g.Meta `path:"/user" tags:"管理员" summary:"新增管理员"`
+	g.Meta `path:"/user" tags:"后台/管理员" summary:"新增管理员"`
 
 	Name     string `json:"name" v:"required#名字不能为空"`
 	Account  string `json:"account" v:"required#账号不能为空"`
@@ -15,7 +15,7 @@ type AddAdminUserReq struct {
 }
 
 type UpdateAdminUserReq struct {
-	g.Meta `path:"/user" tags:"管理员" summary:"更新管理员"`
+	g.Meta `path:"/user" tags:"后台/管理员" summary:"更新管理员"`
 
 	ID       int    `json:"id"`
 	Name     string `json:"name" v:"required#名字不能为空"`
@@ -25,14 +25,14 @@ type UpdateAdminUserReq struct {
 }
 
 type GetAdminUserReq struct {
-	g.Meta `path:"/user" tags:"管理员" summary:"查询管理员"`
+	g.Meta `path:"/user" tags:"后台/管理员" summary:"查询管理员"`
 
 	ID      int    `json:"id" v:"required#ID不能为空"`
 	Account string `json:"account"`
 }
 
 type GetAdminUserListReq struct {
-	g.Meta `path:"/user/list" tags:"管理员" summary:"查询管理员列表"`
+	g.Meta `path:"/user/list" tags:"后台/管理员" summary:"查询管理员列表"`
 
 	Page  int `json:"page" v:"required#页不能为空"`
 	Limit int `json:"limit" v:"required#数量不能为空"`

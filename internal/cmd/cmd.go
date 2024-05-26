@@ -123,8 +123,15 @@ var (
 				middleware.MiniUserToken(ctx, group) // Token以及登录中间件
 				group.Map(g.Map{
 					// 查询使用数量
-					"GET:/num":      mini.Home.GetNum,
-					"GET:/question": mini.Question.GetQuestion,
+					"GET:/num":           mini.Home.GetNum,
+					"GET:/question":      mini.Question.GetQuestion,
+					"GET:/regions/list":  admin.Regions.GetRegionsList,
+					"POST:/address":      mini.Regions.AddAddress,
+					"GET:/address/list":  mini.Regions.GetAddressList,
+					"GET:/address":       mini.Regions.GetAddress,
+					"DELETE:/address":    mini.Regions.DeleteAddress,
+					"PUT:/address":       mini.Regions.UpdateAddress,
+					"PUT:/address/radio": mini.Regions.UpdateRadio,
 				})
 			})
 
