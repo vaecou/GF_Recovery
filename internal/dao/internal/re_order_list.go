@@ -20,12 +20,40 @@ type ReOrderListDao struct {
 
 // ReOrderListColumns defines and stores column names for table re_order_list.
 type ReOrderListColumns struct {
-	UserId string // 订单ID
+	UserId    string // 用户ID
+	OrderId   string // 订单ID
+	Name      string // 名字
+	Phone     string // 手机号
+	Provinces string // 省
+	Citys     string // 市
+	Areas     string // 区
+	Detail    string // 详细地址
+	Day       string // 月日
+	Week      string // 星期
+	Time      string // 时间
+	Type      string // 状态
+	CreatedAt string // 创建时间
+	UpdatedAt string // 更新时间
+	DeletedAt string // 删除时间
 }
 
 // reOrderListColumns holds the columns for table re_order_list.
 var reOrderListColumns = ReOrderListColumns{
-	UserId: "user_id",
+	UserId:    "user_id",
+	OrderId:   "order_id",
+	Name:      "name",
+	Phone:     "phone",
+	Provinces: "provinces",
+	Citys:     "citys",
+	Areas:     "areas",
+	Detail:    "detail",
+	Day:       "day",
+	Week:      "week",
+	Time:      "time",
+	Type:      "type",
+	CreatedAt: "created_at",
+	UpdatedAt: "updated_at",
+	DeletedAt: "deleted_at",
 }
 
 // NewReOrderListDao creates and returns a new DAO object for table data access.
