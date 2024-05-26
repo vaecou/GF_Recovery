@@ -58,13 +58,17 @@ func (c *cRegions) AddAddress(ctx context.Context, req *mini.AddRegionsReq) (res
 func (c *cRegions) GetAddressList(ctx context.Context, req *mini.GetAddressListReq) (res *mini.AddressListRes, err error) {
 	res = &mini.AddressListRes{}
 	id := gconv.Int(ctx.Value("user_id"))
-	res.Radio, err = service.MiniRegions().GetAddressRadio(ctx, id)
-	if err != nil {
-		res.Radio = 0
-	}
+	res.Radio = service.MiniRegions().GetAddressRadio(ctx, id)
 	res.List, err = service.MiniRegions().GetAddressList(ctx, id)
 	if err != nil {
 		return
 	}
+	return
+}
+
+// 查询Radio
+func (c *cRegions) GetAddressRadio(ctx context.Context, req *mini.GetAddressRadioReq) (res *mini.AddressRes, err error) {
+	id := gconv.Int(ctx.Value("user_id"))
+	res = service.MiniRegions().GetAddressRadio(ctx, id)
 	return
 }

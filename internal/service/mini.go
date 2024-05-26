@@ -26,7 +26,7 @@ type (
 		UpdateAddress(ctx context.Context, in *mini.UpdateAddressReq) (err error)
 		UpdateRadio(ctx context.Context, in *mini.UpdateRadioReq) (err error)
 		AddAddress(ctx context.Context, in *mini.AddRegionsReq) (err error)
-		GetAddressRadio(ctx context.Context, id int) (res int, err error)
+		GetAddressRadio(ctx context.Context, id int) (res *mini.AddressRes)
 		GetAddressList(ctx context.Context, id int) (res []*mini.AddressRes, err error)
 	}
 )

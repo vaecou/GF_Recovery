@@ -33,6 +33,10 @@ type UpdateRadioReq struct {
 	ID int `json:"id"`
 }
 
+type GetAddressRadioReq struct {
+	g.Meta `path:"/address/radio" tags:"小程序/地址" summary:"获取默认地址"`
+}
+
 type AddRegionsReq struct {
 	g.Meta `path:"/address" tags:"小程序/地址" summary:"新增地址"`
 
@@ -51,7 +55,7 @@ type GetAddressListReq struct {
 }
 
 type AddressListRes struct {
-	Radio int           `json:"radio"`
+	Radio *AddressRes   `json:"radio"`
 	List  []*AddressRes `json:"list"`
 }
 

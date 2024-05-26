@@ -132,6 +132,7 @@ var (
 					"DELETE:/address":    mini.Regions.DeleteAddress,
 					"PUT:/address":       mini.Regions.UpdateAddress,
 					"PUT:/address/radio": mini.Regions.UpdateRadio,
+					"GET:/address/radio": mini.Regions.GetAddressRadio,
 				})
 			})
 

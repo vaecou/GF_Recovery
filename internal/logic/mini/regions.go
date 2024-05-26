@@ -80,13 +80,8 @@ func (s *sMiniRegions) AddAddress(ctx context.Context, in *mini.AddRegionsReq) (
 	return
 }
 
-func (c *sMiniRegions) GetAddressRadio(ctx context.Context, id int) (res int, err error) {
-	address := &mini.AddressRes{}
-	err = dao.ReAddressList.Ctx(ctx).Where("user_id = ? AND `default` = ?", id, true).Scan(&address)
-	if err != nil {
-		return
-	}
-	res = address.ID
+func (c *sMiniRegions) GetAddressRadio(ctx context.Context, id int) (res *mini.AddressRes) {
+	dao.ReAddressList.Ctx(ctx).Where("user_id = ? AND `default` = ?", id, true).Scan(&res)
 	return
 }
 
