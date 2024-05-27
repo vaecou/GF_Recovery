@@ -133,6 +133,12 @@ var (
 					"PUT:/address":       mini.Regions.UpdateAddress,
 					"PUT:/address/radio": mini.Regions.UpdateRadio,
 					"GET:/address/radio": mini.Regions.GetAddressRadio,
+					"GET:/order/list":    mini.Order.GetOrderList,
+					"PUT:/order":         mini.Order.CancelOrder,
+					"DELETE:/order":      mini.Order.DeleteOrder,
+					"POST:/order":        mini.Order.AddOrder,
+					"GET:/user/phone":    mini.MiniUsers.CheckUserPhone,
+					"PUT:/user/phone":    mini.MiniUsers.SaveUserPhone,
 				})
 			})
 

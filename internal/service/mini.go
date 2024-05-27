@@ -15,6 +15,16 @@ type (
 		// 获取使用次数数量
 		GetNum(ctx context.Context, req *mini.GetNumReq) (res *mini.GetNumRes, err error)
 	}
+	IMiniOrder interface {
+		// 获取订单列表
+		GetOrderList(ctx context.Context, req *mini.GetOrderListReq) (res []*mini.OrderListRes, err error)
+		// 取消订单
+		CancelOrder(ctx context.Context, req *mini.CancelOrderReq) (err error)
+		// 删除订单
+		DeleteOrder(ctx context.Context, req *mini.DeleteOrderReq) (err error)
+		// 创建订单
+		AddOrder(ctx context.Context, req *mini.AddOrderReq) (err error)
+	}
 	IMiniQuestion interface {
 		// 随机获取问题列表
 		GetQuestion(ctx context.Context, req *mini.GetQuestionReq) (res []*mini.QuestionRes, err error)
@@ -29,12 +39,19 @@ type (
 		GetAddressRadio(ctx context.Context, id int) (res *mini.AddressRes)
 		GetAddressList(ctx context.Context, id int) (res []*mini.AddressRes, err error)
 	}
+	IMiniUsers interface {
+		// 检查用户是否存在phone
+		CheckUserPhone(ctx context.Context) (res bool, err error)
+		SaveUserPhone(ctx context.Context, req *mini.SaveUserPhoneReq) (res *mini.UserPhoneRes, err error)
+	}
 )
 
 var (
 	localMiniHome     IMiniHome
+	localMiniOrder    IMiniOrder
 	localMiniQuestion IMiniQuestion
 	localMiniRegions  IMiniRegions
+	localMiniUsers    IMiniUsers
 )
 
 func MiniHome() IMiniHome {
@@ -46,6 +63,17 @@ func MiniHome() IMiniHome {
 
 func RegisterMiniHome(i IMiniHome) {
 	localMiniHome = i
+}
+
+func MiniOrder() IMiniOrder {
+	if localMiniOrder == nil {
+		panic("implement not found for interface IMiniOrder, forgot register?")
+	}
+	return localMiniOrder
+}
+
+func RegisterMiniOrder(i IMiniOrder) {
+	localMiniOrder = i
 }
 
 func MiniQuestion() IMiniQuestion {
@@ -68,4 +96,15 @@ func MiniRegions() IMiniRegions {
 
 func RegisterMiniRegions(i IMiniRegions) {
 	localMiniRegions = i
+}
+
+func MiniUsers() IMiniUsers {
+	if localMiniUsers == nil {
+		panic("implement not found for interface IMiniUsers, forgot register?")
+	}
+	return localMiniUsers
+}
+
+func RegisterMiniUsers(i IMiniUsers) {
+	localMiniUsers = i
 }
