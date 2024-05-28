@@ -24,9 +24,9 @@ type MiniUserRes struct {
 }
 
 type MiniUserListRes struct {
-	ID        int     `json:"id"`
-	Balance   float64 `json:"balance"`
-	Phone     string  `json:"phone"`
-	Status    bool    `json:"status"`
-	CreatedAt string  `json:"created"`
+	ID        int    `json:"id"`
+	Balance   int    `json:"balance"`
+	Phone     string `json:"phone"`
+	Status    bool   `json:"status"`
+	CreatedAt string `json:"created"`
 }

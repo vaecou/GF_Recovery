@@ -3,7 +3,7 @@ package admin
 import (
 	"GF_Recovery/api/admin"
 	"GF_Recovery/internal/dao"
-	"GF_Recovery/internal/model/do"
+	"GF_Recovery/internal/model/entity"
 	"GF_Recovery/internal/service"
 	"context"
 )
@@ -31,7 +31,7 @@ func (s *sSetting) CheckKey(ctx context.Context, key string) (ok bool) {
 
 // 添加设置到数据库
 func (s *sSetting) AddSetting(ctx context.Context, in *admin.AddOrUpdateSettingReq) (err error) {
-	setting := &do.ReSetting{
+	setting := &entity.ReSetting{
 		Key:   in.Key,
 		Value: in.Value,
 	}
@@ -41,7 +41,7 @@ func (s *sSetting) AddSetting(ctx context.Context, in *admin.AddOrUpdateSettingR
 
 // 更新设置到数据库
 func (s *sSetting) UpdateSetting(ctx context.Context, in *admin.AddOrUpdateSettingReq) (err error) {
-	_, err = dao.ReSetting.Ctx(ctx).Where("key", in.Key).Update(do.ReSetting{
+	_, err = dao.ReSetting.Ctx(ctx).Where("key", in.Key).Update(entity.ReSetting{
 		Value: in.Value,
 	})
 	return

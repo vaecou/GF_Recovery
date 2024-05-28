@@ -3,7 +3,6 @@ package middleware
 import (
 	"GF_Recovery/internal/consts"
 	"GF_Recovery/internal/dao"
-	"GF_Recovery/internal/model/do"
 	"GF_Recovery/internal/model/entity"
 	"GF_Recovery/utility/validate"
 	"context"
@@ -212,10 +211,10 @@ func miniUserLoginBefore(r *ghttp.Request) (id string, data interface{}) {
 	var result int64
 	// 不存在unionid
 	if mb == nil {
-		user := &do.ReUser{
+		user := &entity.ReUser{
 			Openid:  res.OpenID,
 			Unionid: res.UnionID,
-			Status:  0,
+			Status:  false,
 		}
 		res, err := dao.ReUser.Ctx(ctx).Insert(user)
 		if err != nil {

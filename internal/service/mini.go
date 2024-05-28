@@ -11,11 +11,20 @@ import (
 )
 
 type (
+	IMiniBalance interface {
+		GetUserBalance(ctx context.Context, req *mini.GetBalanceInfoReq) (res []*mini.BalanceListRes, err error)
+		// 提现
+		Withdraw(ctx context.Context, req *mini.WithdrawReq) (err error)
+	}
 	IMiniHome interface {
 		// 获取使用次数数量
 		GetNum(ctx context.Context, req *mini.GetNumReq) (res *mini.GetNumRes, err error)
 	}
 	IMiniOrder interface {
+		// 获取type为2的所有balance
+		GetUserBalance(ctx context.Context) (res int, err error)
+		// 获取type为3的所有kg
+		GetUserKG(ctx context.Context) (res float64, err error)
 		// 获取订单列表
 		GetOrderList(ctx context.Context, req *mini.GetOrderListReq) (res []*mini.OrderListRes, err error)
 		// 取消订单
@@ -40,6 +49,10 @@ type (
 		GetAddressList(ctx context.Context, id int) (res []*mini.AddressRes, err error)
 	}
 	IMiniUsers interface {
+		// GetUserBalance
+		GetUserBalance(ctx context.Context) (res int, err error)
+		// 检查用户status
+		CheckUserStatus(ctx context.Context) (res bool, err error)
 		// 检查用户是否存在phone
 		CheckUserPhone(ctx context.Context) (res bool, err error)
 		SaveUserPhone(ctx context.Context, req *mini.SaveUserPhoneReq) (res *mini.UserPhoneRes, err error)
@@ -47,12 +60,24 @@ type (
 )
 
 var (
+	localMiniBalance  IMiniBalance
 	localMiniHome     IMiniHome
 	localMiniOrder    IMiniOrder
 	localMiniQuestion IMiniQuestion
 	localMiniRegions  IMiniRegions
 	localMiniUsers    IMiniUsers
 )
+
+func MiniBalance() IMiniBalance {
+	if localMiniBalance == nil {
+		panic("implement not found for interface IMiniBalance, forgot register?")
+	}
+	return localMiniBalance
+}
+
+func RegisterMiniBalance(i IMiniBalance) {
+	localMiniBalance = i
+}
 
 func MiniHome() IMiniHome {
 	if localMiniHome == nil {

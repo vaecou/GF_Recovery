@@ -3,7 +3,6 @@ package mini
 import (
 	"GF_Recovery/api/mini"
 	"GF_Recovery/internal/dao"
-	"GF_Recovery/internal/model/do"
 	"GF_Recovery/internal/model/entity"
 	"GF_Recovery/internal/service"
 	"context"
@@ -25,15 +24,41 @@ func NewMiniUsers() *sMiniUsers {
 	return &sMiniUsers{}
 }
 
-// 检查用户是否存在phone
-func (s *sMiniUsers) CheckUserPhone(ctx context.Context) (res bool, err error) {
+// GetUserBalance
+func (s *sMiniUsers) GetUserBalance(ctx context.Context) (res int, err error) {
 	id := gconv.Int(ctx.Value("user_id"))
-	user := do.ReUser{}
+	user := entity.ReUser{}
 	err = dao.ReUser.Ctx(ctx).Where("id", id).Scan(&user)
 	if err != nil {
 		return
 	}
-	if user.Phone != nil {
+	res = user.Balance
+	return
+}
+
+// 检查用户status
+func (s *sMiniUsers) CheckUserStatus(ctx context.Context) (res bool, err error) {
+	id := gconv.Int(ctx.Value("user_id"))
+	user := entity.ReUser{}
+	err = dao.ReUser.Ctx(ctx).Where("id", id).Scan(&user)
+	if err != nil {
+		return
+	}
+	if user.Status {
+		res = true
+	}
+	return
+}
+
+// 检查用户是否存在phone
+func (s *sMiniUsers) CheckUserPhone(ctx context.Context) (res bool, err error) {
+	id := gconv.Int(ctx.Value("user_id"))
+	user := entity.ReUser{}
+	err = dao.ReUser.Ctx(ctx).Where("id", id).Scan(&user)
+	if err != nil {
+		return
+	}
+	if user.Phone != "" {
 		res = true
 	}
 	return
@@ -65,13 +90,6 @@ func (s *sMiniUsers) SaveUserPhone(ctx context.Context, req *mini.SaveUserPhoneR
 	}
 
 	id := gconv.Int(ctx.Value("user_id"))
-
-	var mb *entity.ReUser
-	err = dao.ReUser.Ctx(ctx).Where("id", id).Scan(&mb)
-	if err != nil {
-		return
-	}
-
 	// 添加用户的手机号
 	_, err = dao.ReUser.Ctx(ctx).OmitEmpty().Where("id", id).Update(g.Map{
 		"phone": result.PhoneInfo.PhoneNumber,

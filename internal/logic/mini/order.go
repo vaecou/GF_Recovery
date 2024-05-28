@@ -22,6 +22,21 @@ func NewOrder() *sMiniOrder {
 	return &sMiniOrder{}
 }
 
+// 获取type为2的所有balance
+func (c *sMiniOrder) GetUserBalance(ctx context.Context) (res int, err error) {
+	id := gconv.Int(ctx.Value("user_id"))
+	balance, err := dao.ReOrderList.Ctx(ctx).Where("user_id", id).Where("type", 2).Sum("balance")
+	res = gconv.Int(balance)
+	return
+}
+
+// 获取type为3的所有kg
+func (c *sMiniOrder) GetUserKG(ctx context.Context) (res float64, err error) {
+	id := gconv.Int(ctx.Value("user_id"))
+	res, err = dao.ReOrderList.Ctx(ctx).Where("user_id", id).Where("type", 3).Sum("kg")
+	return
+}
+
 // 获取订单列表
 func (c *sMiniOrder) GetOrderList(ctx context.Context, req *mini.GetOrderListReq) (res []*mini.OrderListRes, err error) {
 	id := gconv.Int(ctx.Value("user_id"))

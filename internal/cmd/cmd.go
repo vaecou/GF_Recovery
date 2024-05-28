@@ -139,6 +139,9 @@ var (
 					"POST:/order":        mini.Order.AddOrder,
 					"GET:/user/phone":    mini.MiniUsers.CheckUserPhone,
 					"PUT:/user/phone":    mini.MiniUsers.SaveUserPhone,
+					"GET:/personal":      mini.Personal.GetInfo,
+					"GET:/balance":       mini.Balance.GetBalanceInfo,
+					"PUT:/balance":       mini.Balance.Withdraw,
 				})
 			})
 

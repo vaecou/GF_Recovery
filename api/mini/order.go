@@ -50,7 +50,7 @@ type OrderListRes struct {
 	UserID    int     `json:"user_id"`
 	RecylerID int     `json:"recycler_id"`
 	KG        float64 `json:"kg"`
-	Balance   float64 `json:"balance"`
+	Balance   int     `json:"balance"`
 	Name      string  `json:"name"`
 	Phone     string  `json:"phone"`
 	Provinces string  `json:"provinces"`

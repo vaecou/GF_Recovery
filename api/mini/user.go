@@ -13,5 +13,5 @@ type UserPhoneRes struct {
 type SaveUserPhoneReq struct {
 	g.Meta `path:"/user/phone" tags:"小程序/用户" summary:"添加手机号"`
 
-	Code string `json:"code" v:"required#Code不能为空"`
+	Code string `json:"code" v:"required#您已取消授权"`
 }

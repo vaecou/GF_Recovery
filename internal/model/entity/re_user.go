@@ -11,7 +11,7 @@ import (
 // ReUser is the golang structure for table re_user.
 type ReUser struct {
 	Id        int         `json:"id"         orm:"id"         ` // ID
-	Balance   float64     `json:"balance"    orm:"balance"    ` // 余额
+	Balance   int         `json:"balance"    orm:"balance"    ` // 余额
 	Phone     string      `json:"phone"      orm:"phone"      ` // 手机号
 	Openid    string      `json:"openid"     orm:"openid"     ` // 小程序用户OpenID
 	Unionid   string      `json:"unionid"    orm:"unionid"    ` // 小程序用户UnionID

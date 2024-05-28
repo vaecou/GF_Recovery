@@ -3,10 +3,12 @@ package admin
 import (
 	"GF_Recovery/api/admin"
 	"GF_Recovery/internal/dao"
-	"GF_Recovery/internal/model/do"
+	"GF_Recovery/internal/model/entity"
 	"GF_Recovery/internal/service"
 	"context"
 	"sort"
+
+	"github.com/gogf/gf/v2/util/gconv"
 )
 
 type sRegions struct {
@@ -30,8 +32,8 @@ func (s *sRegions) AddRegions(ctx context.Context, in *admin.AddRegionsReq) (err
 	if err != nil {
 		return
 	}
-	region := &do.ReRegions{
-		Sort: LastInsertId * 1024,
+	region := &entity.ReRegions{
+		Sort: gconv.Int(LastInsertId) * 1024,
 	}
 	_, err = dao.ReRegions.Ctx(ctx).OmitNil().Where("id", LastInsertId).UpdateAndGetAffected(region)
 	if err != nil {
