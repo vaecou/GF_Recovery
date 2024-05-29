@@ -80,7 +80,7 @@ func (s *sMiniUsers) SaveUserPhone(ctx context.Context, req *mini.SaveUserPhoneR
 		}),
 	})
 	if err != nil {
-		panic(err)
+		return
 	}
 
 	// {"errcode":0,"errmsg":"ok","phone_info":{"phoneNumber":"19916545450","purePhoneNumber":"19916545450","countryCode":"86","watermark":{"timestamp":1716818136,"appid":"wx3f7c1634de736827"}}}
