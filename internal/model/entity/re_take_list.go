@@ -10,6 +10,7 @@ import (
 
 // ReTakeList is the golang structure for table re_take_list.
 type ReTakeList struct {
+	Id        string      `json:"id"         orm:"id"         ` //
 	UserId    int         `json:"user_id"    orm:"user_id"    ` //
 	Balance   int         `json:"balance"    orm:"balance"    ` //
 	Type      int         `json:"type"       orm:"type"       ` //

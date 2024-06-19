@@ -11,6 +11,20 @@ import (
 )
 
 type (
+	IAbout interface {
+		// 增加段落
+		AddAbout(ctx context.Context, in *admin.AddAboutReq) (err error)
+		// 更新段落
+		UpdateAbout(ctx context.Context, in *admin.UpdateAboutReq) (err error)
+		// 获取关于我们
+		GetAbout(ctx context.Context, in *admin.GetAboutReq) (res *admin.AboutListRes, err error)
+		// 查询关于我们列表数量
+		GetAboutCount(ctx context.Context) (res int, err error)
+		// 获取关于我们列表
+		GetAboutList(ctx context.Context, in *admin.GetAboutListReq) (res []*admin.AboutListRes, err error)
+		// 删除关于我们
+		DeleteAbout(ctx context.Context, in *admin.DeleteAboutReq) (err error)
+	}
 	IMiniUser interface {
 		// 查询用户列表数量
 		GetMiniUserCount(ctx context.Context, in *admin.GetMiniUserListReq) (int, error)
@@ -18,6 +32,20 @@ type (
 		GetMiniUserList(ctx context.Context, in *admin.GetMiniUserListReq) ([]*admin.MiniUserListRes, error)
 		// 更新用户
 		UpdateMiniUser(ctx context.Context, in *admin.UpdateMiniUserReq) (err error)
+	}
+	IProtocol interface {
+		// 增加段落
+		AddProtocol(ctx context.Context, in *admin.AddProtocolReq) (err error)
+		// 更新段落
+		UpdateProtocol(ctx context.Context, in *admin.UpdateProtocolReq) (err error)
+		// 获取回收协议
+		GetProtocol(ctx context.Context, in *admin.GetProtocolReq) (res *admin.ProtocolListRes, err error)
+		// 查询回收协议列表数量
+		GetProtocolCount(ctx context.Context) (res int, err error)
+		// 获取回收协议列表
+		GetProtocolList(ctx context.Context, in *admin.GetProtocolListReq) (res []*admin.ProtocolListRes, err error)
+		// 删除回收协议
+		DeleteProtocol(ctx context.Context, in *admin.DeleteProtocolReq) (err error)
 	}
 	IQuestion interface {
 		// 查询问题是否存在
@@ -74,12 +102,25 @@ type (
 )
 
 var (
+	localAbout     IAbout
 	localMiniUser  IMiniUser
+	localProtocol  IProtocol
 	localQuestion  IQuestion
 	localRegions   IRegions
 	localSetting   ISetting
 	localAdminUser IAdminUser
 )
+
+func About() IAbout {
+	if localAbout == nil {
+		panic("implement not found for interface IAbout, forgot register?")
+	}
+	return localAbout
+}
+
+func RegisterAbout(i IAbout) {
+	localAbout = i
+}
 
 func MiniUser() IMiniUser {
 	if localMiniUser == nil {
@@ -90,6 +131,17 @@ func MiniUser() IMiniUser {
 
 func RegisterMiniUser(i IMiniUser) {
 	localMiniUser = i
+}
+
+func Protocol() IProtocol {
+	if localProtocol == nil {
+		panic("implement not found for interface IProtocol, forgot register?")
+	}
+	return localProtocol
+}
+
+func RegisterProtocol(i IProtocol) {
+	localProtocol = i
 }
 
 func Question() IQuestion {

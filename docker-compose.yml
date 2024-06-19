@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+    container_name: recovery
+    image: recovery
+    environment:
+      - WORKDIR=/app/main
+    volumes:
+      - ./config:/app/main/config  # 挂载当前目录到容器内
+    depends_on:
+      - redis
+      - mysql
+    command: ./main
+    ports:
+      - "8000:8000"  # 应用程序监听的端口
+
+  redis:
+    image: redis:latest
+    container_name: redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - ./data/redis_data:/data  # 将Redis数据挂载到本地的redis_data目录下
+
+  mysql:
+    image: mysql:latest
+    container_name: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: recovery
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./data/mysql_data:/var/lib/mysql  # 将MySQL数据挂载到本地的mysql_data目录下
+
+volumes:
+  redis_data:
+  mysql_data:

@@ -20,6 +20,10 @@ type (
 		// 获取使用次数数量
 		GetNum(ctx context.Context, req *mini.GetNumReq) (res *mini.GetNumRes, err error)
 	}
+	IMiniMore interface {
+		GetAboutSetting(ctx context.Context, in *mini.GetAboutInfoReq) (res *mini.MoreInfoRes, err error)
+		GetProtocoSetting(ctx context.Context, in *mini.GetProtocolInfoReq) (res *mini.MoreInfoRes, err error)
+	}
 	IMiniOrder interface {
 		// 获取type为2的所有balance
 		GetUserBalance(ctx context.Context) (res int, err error)
@@ -62,6 +66,7 @@ type (
 var (
 	localMiniBalance  IMiniBalance
 	localMiniHome     IMiniHome
+	localMiniMore     IMiniMore
 	localMiniOrder    IMiniOrder
 	localMiniQuestion IMiniQuestion
 	localMiniRegions  IMiniRegions
@@ -88,6 +93,17 @@ func MiniHome() IMiniHome {
 
 func RegisterMiniHome(i IMiniHome) {
 	localMiniHome = i
+}
+
+func MiniMore() IMiniMore {
+	if localMiniMore == nil {
+		panic("implement not found for interface IMiniMore, forgot register?")
+	}
+	return localMiniMore
+}
+
+func RegisterMiniMore(i IMiniMore) {
+	localMiniMore = i
 }
 
 func MiniOrder() IMiniOrder {

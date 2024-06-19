@@ -12,6 +12,7 @@ import (
 // ReTakeList is the golang structure of table re_take_list for DAO operations like Where/Data.
 type ReTakeList struct {
 	g.Meta    `orm:"table:re_take_list, do:true"`
+	Id        interface{} //
 	UserId    interface{} //
 	Balance   interface{} //
 	Type      interface{} //

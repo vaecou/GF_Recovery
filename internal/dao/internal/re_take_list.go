@@ -20,6 +20,7 @@ type ReTakeListDao struct {
 
 // ReTakeListColumns defines and stores column names for table re_take_list.
 type ReTakeListColumns struct {
+	Id        string //
 	UserId    string //
 	Balance   string //
 	Type      string //
@@ -28,6 +29,7 @@ type ReTakeListColumns struct {
 
 // reTakeListColumns holds the columns for table re_take_list.
 var reTakeListColumns = ReTakeListColumns{
+	Id:        "id",
 	UserId:    "user_id",
 	Balance:   "balance",
 	Type:      "type",

@@ -14,7 +14,7 @@ type ReOrderList struct {
 	UserId     int         `json:"user_id"     orm:"user_id"     ` // 用户ID
 	RecyclerId int         `json:"recycler_id" orm:"recycler_id" ` // 回收员ID
 	Kg         float64     `json:"kg"          orm:"kg"          ` // 公斤
-	Balance    float64     `json:"balance"     orm:"balance"     ` // 红包
+	Balance    int         `json:"balance"     orm:"balance"     ` // 红包
 	Name       string      `json:"name"        orm:"name"        ` // 名字
 	Phone      string      `json:"phone"       orm:"phone"       ` // 手机号
 	Provinces  string      `json:"provinces"   orm:"provinces"   ` // 省

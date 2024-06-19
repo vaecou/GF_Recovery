@@ -116,6 +116,30 @@ var (
 					// 查询地区列表
 					"GET:/regions/list": admin.Regions.GetRegionsList,
 				})
+				group.Map(g.Map{
+					// 增加问题
+					"POST:/about": admin.About.AddAbout,
+					// 修改问题
+					"PUT:/about": admin.About.UpdateAbout,
+					// 删除问题
+					"DELETE:/about": admin.About.DeleteAbout,
+					// 查询问题
+					"GET:/about": admin.About.GetAbout,
+					// 查询问题列表
+					"GET:/about/list": admin.About.GetAboutList,
+				})
+				group.Map(g.Map{
+					// 增加问题
+					"POST:/protocol": admin.Protocol.AddProtocol,
+					// 修改问题
+					"PUT:/protocol": admin.Protocol.UpdateProtocol,
+					// 删除问题
+					"DELETE:/protocol": admin.Protocol.DeleteProtocol,
+					// 查询问题
+					"GET:/protocol": admin.Protocol.GetProtocol,
+					// 查询问题列表
+					"GET:/protocol/list": admin.Protocol.GetProtocolList,
+				})
 			})
 
 			s.Group("/mini", func(group *ghttp.RouterGroup) {
@@ -142,6 +166,8 @@ var (
 					"GET:/personal":      mini.Personal.GetInfo,
 					"GET:/balance":       mini.Balance.GetBalanceInfo,
 					"PUT:/balance":       mini.Balance.Withdraw,
+					"GET:/about":         mini.More.GetAboutSetting,
+					"GET:/protocol":      mini.More.GetProtocoSetting,
 				})
 			})
 
